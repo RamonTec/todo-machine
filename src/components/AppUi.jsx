@@ -1,24 +1,25 @@
 import React from "react"
-import { TodoCounter } from "./TodoCounter";
-import { TodoSearch } from "./TodoSearch"
-import { TodoList } from "./TodoList"
-import { TodoItem } from "./TodoItem"
-import { CreateTodoButton } from "./CreateTodoButton"
-import { TodoContext } from "./context/todoContext"
+import { TodoCounter } from "./ProdCounter";
+import { TodoSearch } from "./ProdSearch"
+import { TodoList } from "./ProdList"
+import { TodoItem } from "./ProdItem"
+import { CreateTodoButton } from "./CreateProdButton"
+import { ProductContext } from "./context/prodContext"
 import { ModalForm } from "./modalForm"
-import { TodoForm } from "./TodoForm"
+import { TodoForm } from "./Product"
 
 function AppUi() {
 
   const {
     error, 
-    loading, 
-    searchTodos, 
-    completeTodo, 
-    deleteTodo,
+    loading,
+    deleteProducto,
     openModal,
-    setOpenModal
-  } = React.useContext(TodoContext)
+    setOpenModal,
+    openModalToEdit,
+    filteredProducts,
+  } = React.useContext(ProductContext);
+
   return (
     <>
       <TodoCounter/>
@@ -28,14 +29,15 @@ function AppUi() {
       <TodoList>
         {error && <p style={{color:"white"}}>Despierta! Hay un error.</p>}
         {loading && <p style={{color:"white"}}>Estamos cargando, ya estaremos listos.</p>}
-        {(!loading && !searchTodos.length) && <p style={{color:"white"}}> Crea tu primer todo!</p>}
-        {searchTodos.map(todo => (
+        {(!loading && !filteredProducts.length) && <p style={{color:"white"}}> Registra tus productos!</p>}
+        {filteredProducts.map(product => (
           <TodoItem 
-            key={todo.text} 
-            text={todo.text}
-            completed={todo.status}
-            onComplete={ () => completeTodo(todo.text) }
-            onDelete={ () => deleteTodo(todo.text) }
+            key={product.name} 
+            text={product.name}
+            status={product.isAlimento}
+            stock={product.stock}
+            onEdit={ () => openModalToEdit(product.key) }
+            onDelete={ () => deleteProducto(product.name)}
           />
         ))}
       </TodoList>
